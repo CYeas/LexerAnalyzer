@@ -1,0 +1,28 @@
+begin
+ 1
+integer 1
+k;
+ 1
+integer 1
+function 1
+F(n);
+ 1
+begin
+ 1
+integer 1
+n;
+ 1
+if 1
+n<=0 1
+then 1
+F:=1
+ 1
+else 1
+F:=n*F(n-1)
+ 1
+end;
+ 1
+read(m);
+ 1
+k:=F(m);
+ 1
