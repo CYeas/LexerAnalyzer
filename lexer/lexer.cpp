@@ -7,6 +7,7 @@
 int main()
 {
 
+
 	LexerAnalyzer* lex = new LexerAnalyzer("source");
 	lex->start();
 	system("pause");
