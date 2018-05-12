@@ -12,10 +12,13 @@ private:
 		std::string word;
 		int type;
 	};
-	void readFile(char * _fileName, std::string &fileString);
+	void readFile();
 	void writeTable();
 	void analyze();
-	void splitToWords();
+	void scan();
+	bool isLetter(const char & character);
+	bool isNum(const char & character);
+	char nextNotBlankWord();
 	void analyzeWord();
 
 	std::string fileName;

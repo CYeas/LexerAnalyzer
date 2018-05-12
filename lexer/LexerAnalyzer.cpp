@@ -20,20 +20,16 @@ LexerAnalyzer::~LexerAnalyzer()
 void LexerAnalyzer::start() 
 {
 	std::string sourceString;
-	readFile(fileName, sourceString);
+	readFile();
 	analyze();
 	writeTable();
 }
 
-void LexerAnalyzer::readFile(char* _fileName, std::string &fileString)
+void LexerAnalyzer::readFile()
 {
-	std::cout << "read file start" << std::endl;
-	sourceFile.open(_fileName);
-	while (!sourceFile.eof()) {
-		fileString += sourceFile.get();
-	}
-	sourceFile.close();
-	std::cout << "read file done" << std::endl;
+	std::cout << "open file start" << std::endl;
+	sourceFile.open(fileName);
+	std::cout << "open file done" << std::endl;
 }
 
 void LexerAnalyzer::writeTable()
@@ -54,47 +50,48 @@ void LexerAnalyzer::writeTable()
 void LexerAnalyzer::analyze()
 {
 	std::cout << "analyze start" << std::endl;
-	splitToWords();
-	analyzeWord();
+	scan();
 	std::cout << "analyze done" << std::endl;
 }
 
-void LexerAnalyzer::splitToWords()
+void LexerAnalyzer::scan()
 {
-	std::cout << "split word ---------" << std::endl;
-	bool wordDone = false;
-	bool wordStart = false;
+	std::cout << "scan ---------" << std::endl;
 	char temp;
-	int fileLength = fileString.length();
-	std::string result;
-	for (int index = 0; index < fileLength; index++)
+	while (temp = nextNotBlankWord())
 	{
-		temp = fileString[index];
-		if (temp == ' ') {
-			if (wordStart) {
-				wordDone = true;
-			}
-			else
-			{
-				continue;
-			}
-		}
-		else 
+		if (isLetter(temp))
 		{
-			if (!wordStart) 
-			{
-				wordStart = true;
-				result = "";
-			}
-			result += temp;
-		}
-		if (wordDone) {
-			wordArray.push_back(result);
-			wordDone = false;
-			wordStart = false;
+
 		}
 	}
-	std::cout << "split word --------- done" << std::endl;
+	std::cout << "scan --------- done" << std::endl;
+}
+
+
+
+bool LexerAnalyzer::isLetter(const char & character)
+{
+	return (('A' <= character && character <= 'Z') || ('a' <= character && character <= 'z'));
+}
+
+bool LexerAnalyzer::isNum(const char & character)
+{
+	return '0' <= character && character <= '9';
+}
+
+char LexerAnalyzer::nextNotBlankWord()
+{
+	char temp = NULL;
+	while (!sourceFile.eof())
+	{
+		temp = sourceFile.get();
+		if (temp != ' ')
+		{
+			break;
+		}
+	}
+	return temp;
 }
 
 void LexerAnalyzer::analyzeWord()
