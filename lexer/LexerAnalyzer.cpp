@@ -120,8 +120,7 @@ void LexerAnalyzer::scan()
 			case'>':temp = analyzeGreater(temp); break;
 			case':':temp = analyzeColon(temp); break;
 			case '\n':temp = unvisbaleChar(temp); break;
-			default:
-				break;
+			default:errorInfo("no such sign");break;
 			}
 		}
 	}
@@ -142,7 +141,14 @@ char LexerAnalyzer::analyzeWord(char first)
 		}
 		else
 		{
-			allocateWord(word);
+			if (word.length > 16)
+			{
+				errorInfo("character is too long");
+			}
+			else
+			{
+				allocateWord(word);
+			}
 			return temp;
 		}
 	}
@@ -184,6 +190,10 @@ char LexerAnalyzer::analyzeColon(char first)
 	char temp = sourceFile.get();
 	if (temp == '=') {
 		word += '=';
+	}
+	else
+	{
+		errorInfo("expected =");
 	}
 	allocateWord(word);
 	return temp;
@@ -295,7 +305,7 @@ void LexerAnalyzer::writeError()
 	std::string temp = "";
 	for (it = errorMap.begin(); it != errorMap.end(); it++)
 	{
-		temp = "" + std::to_string(it->type) + "  " + it->word + "\n";
+		temp = "LINE:" + std::to_string(it->type) + "  " + it->word + "\n";
 		targetTable << temp;
 	}
 	errorTable.close();
